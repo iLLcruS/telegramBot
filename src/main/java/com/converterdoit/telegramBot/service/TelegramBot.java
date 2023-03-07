@@ -11,6 +11,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
@@ -42,9 +44,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         }catch(TelegramApiException e){
             log.error("Error setting bot's command list: " + e.getMessage());
         }
-
-
-
     }
 
     @Override
@@ -60,6 +59,10 @@ public class TelegramBot extends TelegramLongPollingBot {
 
 
             switch (messageText) {
+                case "/settings":
+                        sendMessage(chatId, "Enter your text:");
+                        stringSubstring(chatId);
+
                 case "/help":
                         sendMessage(chatId, HELP_TEXT);
                         log.info("/help used: " + update.getMessage().getChat().getFirstName());
@@ -94,10 +97,46 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.setChatId(String.valueOf(chatId));
         message.setText(textToSend);
 
+        ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+
+        List<KeyboardRow> keyboardRows = new ArrayList<>();
+        KeyboardRow row = new KeyboardRow();
+
+        row.add("Start");
+        row.add("Settings");
+        row.add("Help");
+        row.add("String");
+
+        keyboardRows.add(row);
+
+        keyboardMarkup.setKeyboard(keyboardRows);
+
+        message.setReplyMarkup(keyboardMarkup);
+
         try{
             execute(message);
         } catch (TelegramApiException e) {
             log.error("E-occurred: " + e.getMessage());
         }
+    }
+    private void stringSubstring(long chatId){
+        Update update = new Update();
+        String textFromUser = update.getMessage().getText();
+
+        SendMessage sendMessage = SendMessage.builder()
+                .chatId(chatId)
+                .text("I've received your text: " + textFromUser)
+                .build();
+
+        String messageText = update.getMessage().getText();
+        sendMessage(chatId, "Enter first value: ");
+
+        String messageText2 = update.getMessage().getText();
+        sendMessage(chatId, "Enter second value: ");
+
+        String messageText3 = update.getMessage().getText();
+        messageText.substring(Integer.parseInt(messageText2), Integer.parseInt(messageText3));
+        sendMessage(chatId, "This new sentence: " + messageText);
+
     }
 }
