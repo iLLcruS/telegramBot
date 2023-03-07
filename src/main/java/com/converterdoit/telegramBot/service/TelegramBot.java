@@ -59,10 +59,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 
 
             switch (messageText) {
-                case "/settings":
-                        sendMessage(chatId, "Enter your text:");
-                        stringSubstring(chatId);
-
+                case "/id":
+                       sendMessage(chatId, "Your chat id is: " + chatId);
+                       break;
                 case "/help":
                         sendMessage(chatId, HELP_TEXT);
                         log.info("/help used: " + update.getMessage().getChat().getFirstName());
