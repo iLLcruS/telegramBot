@@ -69,7 +69,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                         startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
                         break;
                 default:
-                        sendMessage(chatId, "Ssory, command has not found");
+                        sendMessage(chatId, "Sorry, command has not found");
             }
         }
     }
