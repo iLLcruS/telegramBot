@@ -3,6 +3,7 @@ package com.converterdoit.telegramBot.service;
 
 import com.converterdoit.telegramBot.TelegramBotApplication;
 import com.converterdoit.telegramBot.config.configBot;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -10,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
+@Slf4j
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
 
@@ -50,6 +52,8 @@ public class TelegramBot extends TelegramLongPollingBot {
         sb.append("Hi " + name + ", welcome to the InnerBot!");
         sb.append("\nPlease, choose option:");
 
+        log.info("Replied to user: " + name);
+
         sendMessage(chatId, sb.toString());
 
     }
@@ -62,7 +66,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try{
             execute(message);
         } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
+            log.error("E-occurred: " + e.getMessage());
         }
     }
 }
